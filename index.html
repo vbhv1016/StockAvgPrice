@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Average Stock Price Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+
+      .container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 40px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      label {
+        font-weight: bold;
+      }
+
+      .btn-calculate,
+      .btn-reset {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .btn-calculate {
+        background-color: #007bff;
+      }
+
+      .btn-calculate:hover {
+        background-color: #0056b3;
+      }
+
+      .btn-reset {
+        background-color: #dc3545;
+      }
+
+      .btn-reset:hover {
+        background-color: #a71c27;
+      }
+
+      #result {
+        text-align: center;
+        font-weight: bold;
+        color: #333;
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #f0f0f0;
+        border-radius: 5px;
+        transition: opacity 0.5s;
+        opacity: 0;
+      }
+
+      #error {
+        color: #dc3545;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-5">
+      <h2>Average Stock Price Calculator</h2>
+      <div class="form-group">
+        <label for="initialQuantity">Initial Quantity:</label>
+        <input
+          type="number"
+          class="form-control"
+          id="initialQuantity"
+          min="1"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="initialPrice">Initial Price (INR):</label>
+        <input
+          type="number"
+          class="form-control"
+          id="initialPrice"
+          min="0"
+          step="0.01"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="subsequentQuantity">Subsequent Quantity:</label>
+        <input
+          type="number"
+          class="form-control"
+          id="subsequentQuantity"
+          min="0"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="currentPrice">Current Price (INR):</label>
+        <input
+          type="number"
+          class="form-control"
+          id="currentPrice"
+          min="0"
+          step="0.01"
+          required
+        />
+      </div>
+      <button class="btn-calculate" onclick="calculateAverage()">
+        Calculate
+      </button>
+      <button class="btn-reset" onclick="resetForm()">Reset</button>
+      <div id="error" class="error"></div>
+      <div id="result"></div>
+    </div>
+
+    <script>
+      function calculateAverage() {
+        var initialQuantity = parseInt(
+          document.getElementById("initialQuantity").value
+        );
+        var initialPrice = parseFloat(
+          document.getElementById("initialPrice").value
+        );
+        var subsequentQuantity = parseInt(
+          document.getElementById("subsequentQuantity").value
+        );
+        var currentPrice = parseFloat(
+          document.getElementById("currentPrice").value
+        );
+
+        var errorElement = document.getElementById("error");
+        errorElement.innerText = "";
+
+        if (
+          isNaN(initialQuantity) ||
+          isNaN(initialPrice) ||
+          isNaN(subsequentQuantity) ||
+          isNaN(currentPrice)
+        ) {
+          errorElement.innerText = "Please enter valid numbers.";
+          return;
+        }
+
+        if (
+          initialQuantity <= 0 ||
+          initialPrice < 0 ||
+          subsequentQuantity < 0 ||
+          currentPrice < 0
+        ) {
+          errorElement.innerText = "Please enter positive values.";
+          return;
+        }
+
+        var totalQuantity = initialQuantity + subsequentQuantity;
+        var totalPrice =
+          initialQuantity * initialPrice + subsequentQuantity * currentPrice;
+        var averagePrice = totalPrice / totalQuantity;
+        var formattedPrice = averagePrice.toLocaleString("en-IN", {
+          style: "currency",
+          currency: "INR",
+        });
+
+        var resultElement = document.getElementById("result");
+        resultElement.innerText = "Average Stock Price: " + formattedPrice;
+        resultElement.style.opacity = 1;
+      }
+
+      function resetForm() {
+        document.getElementById("initialQuantity").value = "";
+        document.getElementById("initialPrice").value = "";
+        document.getElementById("subsequentQuantity").value = "";
+        document.getElementById("currentPrice").value = "";
+        document.getElementById("error").innerText = "";
+
+        var resultElement = document.getElementById("result");
+        resultElement.innerText = "";
+        resultElement.style.opacity = 0;
+      }
+    </script>
+  </body>
+</html>
